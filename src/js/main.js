@@ -82,8 +82,6 @@ define([
         tbodyEl = document.querySelector("#int-table tbody");
         tbodyEl.innerHTML = tableRendered;
 
-        // initSparklines();
-
         initSearch();
 
         addMobilePrefix();
@@ -190,14 +188,6 @@ define([
         return (c > 0) ? true : false;
     }
 
-    function initSparklines() {
-        setTimeout(function() {
-            sparklines = document.querySelectorAll(".sparkline");
-            for (var i = 0; i < sparklines.length; i++)
-                sparkline(sparklines[i]);
-        }, 100);
-    }
-
     function scale(max, min, num) {
         return (100 * (num - min) / (max - min)) || 0;
     }
@@ -249,27 +239,6 @@ define([
             ln.setAttribute("stroke", color);
             ln.setAttribute("stroke-width", "1.25");
             elem.appendChild(ln);
-
-            if (show_max && parts[i] === 100) {
-            var circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-            circle.setAttribute("cx", x2 + "%");
-            circle.setAttribute("cy", 3 + "%");
-            circle.setAttribute("r", dotSize + "%");
-            circle.setAttribute("fill", maxmin_color);
-            circle.setAttribute("stroke", maxmin_color);
-            elem.appendChild(circle);
-            }
-            if (show_min && parts[i] === 0) {
-                if (i > 0 && parts[i - 1] === 0) {} else {
-                    var circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-                    circle.setAttribute("cx", x2 + "%");
-                    circle.setAttribute("cy", 97 + "%");
-                    circle.setAttribute("r", dotSize + "%");
-                    circle.setAttribute("fill", maxmin_color);
-                    circle.setAttribute("stroke", maxmin_color);
-                    elem.appendChild(circle);
-                }
-            }
         }
         return elem.outerHTML;
     }
