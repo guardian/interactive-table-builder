@@ -1,0 +1,27 @@
+{
+  "name": "Interactive template",
+  "version": "0.0.0",
+  "homepage": "https://github.com/guardian/interactive-template",
+  "authors": [
+    "andymason <andrew.mason@guardian.co.uk>"
+  ],
+  "description": "Base template for interactives",
+  "main": "src/boot.js",
+  "license": "Apache",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "almond": "0.3.0",
+    "curl": "0.8.12",
+    "iframe-messenger": "guardian/iframe-messenger#master",
+    "pasteup-buttons": "~0.4.12",
+    "ractive": "0.6.1",
+    "requirejs-plugins": "1.0.3",
+    "text": "2.0.10"
+  }
+}

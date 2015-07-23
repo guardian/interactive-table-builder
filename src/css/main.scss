@@ -1,0 +1,197 @@
+/**
+ * Project: Project name 
+ * File:    Main SCSS
+ */
+
+$guss-webfonts-base-url: '//pasteup.guim.co.uk/fonts/';
+@import 'bower_components/guss-webfonts/src/_webfonts.scss';
+@include guss-webfonts();
+
+@import 'modules/mq';
+
+.element-interactive {
+
+	@include mq($until: mobileLandscape)  {
+		table, thead, tbody, th, td, tr { 
+			display: block;
+		}
+
+		thead tr { 
+			position: absolute;
+			top: -9999px;
+			left: -9999px;
+		}
+
+		th {
+			border-bottom: none;
+			vertical-align: top;
+		}
+
+
+		td { 
+			border: none;
+			border-bottom: 0 !important;
+			position: relative; 
+		}
+	}
+
+	tr th {
+		padding: 10px 40px 10px 0;
+	}
+
+	table {
+		border-collapse: collapse;
+		width: 100%;
+	}
+
+	tr {
+		@include mq($until: mobileLandscape) {
+			padding: 12px 0;
+			border-bottom: 1px solid #dcdcdc;
+		}
+	}
+
+	.highlighted {
+		background-color: #edf9fc;
+	}
+
+	tr td {
+		vertical-align: top;
+		padding: 12px 10px 12px 0;
+		font-family: "Guardian Text Sans Web";
+  		font-size: 12px; 
+  		line-height: 16px;
+  		color: #676767;
+  		padding-top: 6px;
+  		border-bottom: 1px solid #dcdcdc;
+
+  		@include mq($until: mobileLandscape) {
+  			padding: 0;
+  		}
+	}
+
+	.int-table-title {
+		font-size: 28px;
+		font-weight: 300;
+		color: #005689;
+		font-family: "Guardian Egyptian Web", Georgia, serif;
+		margin-bottom: 6px;
+	}
+
+	.int-table-subtitle {
+		color: #333;
+		font-family: 'Guardian Text Egyptian Web', Georgia, serif;
+		font-size: 16px;
+		line-height: 24px;
+		margin-bottom: 24px;
+	}
+
+	td:first-child {
+		font-weight: 500; 
+		color: #333 !important;
+
+		@include mq(mobileLandscape) {
+			font-weight: 500;
+		}
+	}
+}
+
+.column-header {
+	text-align: left;
+	color: #333 !important;
+	font-family: "Guardian Egyptian Web" !important;
+	font-size: 14px !important;
+	font-weight: 600 !important;
+	vertical-align: top;
+	line-height: 16px;
+	border-bottom: 2px solid #dcdcdc;
+	position: relative;
+
+	@media screen and (-webkit-min-device-pixel-ratio:0) { 
+		min-width: 40px;
+    	width: 1px;
+	}
+
+	&:hover {
+		cursor: pointer;
+	}
+}
+
+th.column-header::after {
+	content: ' ';
+	width: 0;
+	height: 0;
+	border-left: 4px solid transparent;
+	border-right: 4px solid transparent;
+	border-bottom: 5px solid black;
+	position: absolute;
+	top: 12px;
+	margin-left: 10px;
+	right: 10px;
+}
+
+th.column-header::before {
+	content: ' ';
+	width: 0;
+	height: 0;
+	border-left: 4px solid transparent;
+	border-right: 4px solid transparent;
+	border-top: 5px solid black;
+	position: absolute;
+	right: 10px;
+	top: 18px;
+
+}
+
+th.column-header.sorted::before {
+	display: block;
+}
+
+th.column-header.sorted::after {
+	display: none;
+}
+
+th.column-header.sorted-reversed::before {
+	display: none;
+}
+
+th.column-header.sorted-reversed::after {
+	display: block;
+}
+
+th.column-header.sorted,th.column-header.sorted-reversed {
+	background-color: #f9f9f9;
+}
+
+#search-field {
+	height: 36px;
+	border: 1px solid #ccc;
+	border-radius: 24px;
+	padding-left: 12px;
+	padding-right: 10px;
+	padding-bottom: 3px;
+	width: 100%;
+	font-size: 14px;
+	margin-bottom: 18px;
+	max-width: 620px;
+	box-sizing: border-box;
+
+    &:focus {
+    	outline: 0;
+    	border: 1px solid #767676;
+    }
+}
+
+.column svg {
+	width: 200px;
+	height: 30px;
+
+	@include mq($until: desktop) {
+		width: 120px;
+		height: 25px;
+	}
+}
+
+figure {
+	margin: 0 !important;
+}

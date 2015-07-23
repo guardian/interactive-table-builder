@@ -1,0 +1,12 @@
+{{#rows}}
+    <tr class="{{highlightClass}}">
+        {{#.}}
+            <td class="column {{sparklineClass}}">{{{.}}}</td>
+        {{/.}}
+    </tr>
+{{/rows}}
+{{#emptyBoolean}}
+    <tr>
+        <td class="column" style="border-bottom: 0;">No matches</td>
+    </tr>
+{{/emptyBoolean}}

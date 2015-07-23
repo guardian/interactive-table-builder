@@ -1,0 +1,19 @@
+<div class="int-table-title">{{meta.title}}</div>
+<div class="int-table-subtitle">{{meta.subtitle}}</div>
+{{#searchable}}
+	<input class="search" id="search-field" value="Search"/>
+{{/searchable}}
+<div id="int-table__wrapper">
+	<table id="int-table" cellspacing="0">
+	    <thead>
+	        <tr>
+	            {{#headerRows}}
+	                <th class="column-header">{{.}}</th>
+	            {{/headerRows}}
+	        </tr>
+	    </thead>
+	    <tbody>
+	    	
+	    </tbody>
+	</table>
+</div>
