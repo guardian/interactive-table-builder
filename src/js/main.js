@@ -16,6 +16,7 @@ define([
         reversed = false,
         data,
         tbodyEl,
+        tableEl,
         currentSort,
         lastSorted,
         searchable,
@@ -31,7 +32,7 @@ define([
 
     function init(el, spreadsheetID) {
         reqwest({
-            url: "http://interactive.guim.co.uk/spreadsheetdata/" + spreadsheetID + ".json",
+            url: "http://interactive.guim.co.uk/docsdata-test/" + spreadsheetID + ".json",
             type: "json",
             method: "get",
             success: function(resp) {
@@ -41,32 +42,50 @@ define([
     }
 
     function app(spreadsheet, el) {
+        console.log(spreadsheet);
         data = spreadsheet;
         searchable = (data.sheets.tableMeta[0].searchable.toLowerCase() === 'true');
 
-        var j = 0;
-        var length = -1; // starts at -1 to offset the rowNumber field
-
         // reformat data into an array of arrays
-        for (var i = 0; i < data.sheets.dataSheet.length; i++) {
-            formattedData[i] = [];
-            for (j in data.sheets.dataSheet[0]) {
-                if (j === "highlight") {
-                    highlighted[formattedData[i][0]] = data.sheets.dataSheet[i][j];
-                } else if (data.sheets.dataSheet[i][j].toString().slice(0, 11) === "[sparkline=") {
-                    length++;
-                    formattedData[i][length] = draw(data.sheets.dataSheet[i][j].substr(11).slice(0, -1));
-                } else {
-                    length++;
-                    formattedData[i][length] = data.sheets.dataSheet[i][j];
-                }
-            }
-            length = -1;
-            formattedData[i].pop();
+        // for (var i = 0; i < data.sheets.dataSheet.length; i++) {
+        //     formattedData[i] = [];
+        //     for (j in data.sheets.dataSheet[0]) {
+        //         if (j === "highlight") {
+        //             highlighted[formattedData[i][0]] = data.sheets.dataSheet[i][j];
+        //         } else if (data.sheets.dataSheet[i][j].toString().slice(0, 11) === "[sparkline=") {
+        //             length++;
+        //             formattedData[i][length] = draw(data.sheets.dataSheet[i][j].substr(11).slice(0, -1));
+        //         } else {
+        //             length++;
+        //             formattedData[i][length] = data.sheets.dataSheet[i][j];
+        //         }
+        //     }
+        //     length = -1;
+        //     formattedData[i].pop();
+        // }
+
+        headerRows = data.sheets.tableDataSheet[0];
+        formattedData = data.sheets.tableDataSheet.slice(1);
+
+        // convert highlight column into usable format and pop
+        if(headerRows[headerRows.length-1] === "highlight") {
+            formattedData.map(function(row) {
+                highlighted[row[0]] = row[headerRows.length-1];
+                row.pop();
+            });
+            headerRows.pop();
         }
 
-        headerRows = formattedData[0];
-        formattedData = formattedData.slice(1);
+        //init Sparklines
+        formattedData.map(function(row, i) {
+            row.map(function(cell, j) {
+                if(cell.toString().slice(0, 11) === "[sparkline=") {
+                    formattedData[i][j] = draw(cell.substr(11).slice(0, -1));
+                }
+            });
+        });
+
+        console.log(formattedData);
 
         var tableRendered = Mustache.render(template, {
             rows: formattedData,
@@ -80,6 +99,7 @@ define([
         el.innerHTML = metaRendered;
 
         tbodyEl = document.querySelector("#int-table tbody");
+        tableEl = document.getElementById("int-table");
         tbodyEl.innerHTML = tableRendered;
 
         initSearch();
@@ -90,12 +110,8 @@ define([
     }
 
     function sortColumns(e) {
-        var sorted = formattedData.sort(propComparator(e.target.cellIndex));
-        var rendered = Mustache.render(template, {
-            rows: sorted,
-            highlightClass: highlightedFunc
-        });
-        initSparklines();
+        formattedData = formattedData.sort(propComparator(e.target.cellIndex));
+
         if (lastSorted) {
             lastSorted.className = "column-header";
         }
@@ -106,16 +122,21 @@ define([
             e.target.className = "column-header sorted";
             reversed = false;
         }
-        el.className += " table-sorted";
+        if(!hasClass(tableEl,"table-sorted")) {
+            tableEl.className = "table-sorted";
+        }
         lastSorted = e.target;
-        tbodyEl.innerHTML = rendered;
+        render();
     }
 
     function propComparator(prop) {
+        var c,d;
         currentSort = (currentSort !== prop) ? prop : null;
         return function Comparator(a, b) {
-            if (a[prop] < b[prop]) return (currentSort !== prop) ? -1 : 1;
-            if (a[prop] > b[prop]) return (currentSort !== prop) ? 1 : -1;
+            c = (typeof a[prop] === "string" && !isNaN(parseInt(a[prop]))) ? parseInt(a[prop].replace(/,/g, '')) : a[prop]; //refactor
+            d = (typeof b[prop] === "string" && !isNaN(parseInt(b[prop]))) ? parseInt(b[prop].replace(/,/g, '')) : b[prop];
+            if (c < d) return (currentSort !== prop) ? -1 : 1;
+            if (c > d) return (currentSort !== prop) ? 1 : -1;
             return 0;
         }
     }
@@ -123,9 +144,11 @@ define([
     function initSearch() {
         if (searchable) {
             searchEl = document.getElementById("search-field");
-            searchEl.addEventListener("keyup", searchFunc);
+            searchEl.addEventListener("keyup", render);
             searchEl.addEventListener("focus", function() {
-                this.value = "";
+                if(this.value === "Search") {
+                    this.value = "";
+                }
             });
             searchEl.addEventListener("blur", function() {
                 if (this.value === "") {
@@ -135,20 +158,16 @@ define([
         }
     }
 
-    function searchFunc() {
-        var filtered = formattedData.filter(searchMatch),
-            rendered,
-            emptyBoolean;
+    function render() {
+        var rowsToRender = (searchEl.value !== "Search" && searchEl.value !== "") ? formattedData.filter(searchMatch) : formattedData,
+            emptyBoolean = (rowsToRender.length > 0) ? false : true,
+            rendered = Mustache.render(template, {
+                rows: rowsToRender,
+                highlightClass: highlightedFunc,
+                emptyBoolean: emptyBoolean
+            });
 
-        emptyBoolean = (filtered.length > 0) ? false : true;
-
-        rendered = Mustache.render(template, {
-            rows: filtered,
-            emptyBoolean: emptyBoolean,
-            highlightClass: highlightedFunc
-        });
         tbodyEl.innerHTML = rendered;
-        initSparklines();
     }
 
     function addMobilePrefix() {
@@ -186,6 +205,16 @@ define([
         }
 
         return (c > 0) ? true : false;
+    }
+
+    function hasClass(el, cls) {
+        if (!el.className) {
+            return false;
+        } else {
+            var newElementClass = ' ' + el.className + ' ';
+            var newClassName = ' ' + cls + ' ';
+            return newElementClass.indexOf(newClassName) !== -1;
+        }
     }
 
     function scale(max, min, num) {
@@ -230,8 +259,8 @@ define([
             var ln = document.createElementNS("http://www.w3.org/2000/svg", "line");
             x1 = x2;
             y1 = y2;
-            x2 = range * (i / parts.length) + (div / 2);
-            y2 = range - parts[i];
+            x2 = (range * (i / parts.length) + (div / 2) > 0) ? range * (i / parts.length) + (div / 2) : 0;
+            y2 = (range - parts[i] > 0) ? range - parts[i] : 0;
             ln.setAttribute("x1", x1 + "%");
             ln.setAttribute("x2", x2 + "%");
             ln.setAttribute("y1", y1 + "%");
