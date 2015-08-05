@@ -42,27 +42,8 @@ define([
     }
 
     function app(spreadsheet, el) {
-        console.log(spreadsheet);
         data = spreadsheet;
         searchable = (data.sheets.tableMeta[0].searchable.toLowerCase() === 'true');
-
-        // reformat data into an array of arrays
-        // for (var i = 0; i < data.sheets.dataSheet.length; i++) {
-        //     formattedData[i] = [];
-        //     for (j in data.sheets.dataSheet[0]) {
-        //         if (j === "highlight") {
-        //             highlighted[formattedData[i][0]] = data.sheets.dataSheet[i][j];
-        //         } else if (data.sheets.dataSheet[i][j].toString().slice(0, 11) === "[sparkline=") {
-        //             length++;
-        //             formattedData[i][length] = draw(data.sheets.dataSheet[i][j].substr(11).slice(0, -1));
-        //         } else {
-        //             length++;
-        //             formattedData[i][length] = data.sheets.dataSheet[i][j];
-        //         }
-        //     }
-        //     length = -1;
-        //     formattedData[i].pop();
-        // }
 
         headerRows = data.sheets.tableDataSheet[0];
         formattedData = data.sheets.tableDataSheet.slice(1);
@@ -84,8 +65,6 @@ define([
                 }
             });
         });
-
-        console.log(formattedData);
 
         var tableRendered = Mustache.render(template, {
             rows: formattedData,
@@ -186,6 +165,16 @@ define([
 
         css += "}";
 
+        if(data.sheets.tableMeta[0].rowLimit.toString().toLowerCase() !== "false" && data.sheets.tableMeta[0].rowLimit > 0) {
+            var wrapperEl = document.getElementById("int-table__wrapper");
+            wrapperEl.className = "truncated";
+            css += ".truncated tr:nth-of-type(1n+" + (parseInt(data.sheets.tableMeta[0].rowLimit)+1) + ") { display: none; }";
+
+            document.getElementById("untruncate").addEventListener("click", function() {
+                wrapperEl.className = "";
+            });
+        }
+
         style.type = 'text/css';
 
         if (style.styleSheet) {
@@ -201,7 +190,7 @@ define([
         var c = 0;
 
         for (var a = 0; a < array.length; a++) {
-            c = (array[a].toString().toLowerCase().indexOf(searchEl.value.toLowerCase()) !== -1) ? c + 1 : c;
+            c = (array[a].toString().substr(0,4) !== "<svg" && array[a].toString().toLowerCase().indexOf(searchEl.value.toLowerCase()) !== -1) ? c + 1 : c;
         }
 
         return (c > 0) ? true : false;
