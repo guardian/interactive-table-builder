@@ -1,7 +1,7 @@
 # Interactive Table Builder  
 Create sortable, searchable tables from Google Sheets.
 
-## Creating your table
+# Creating your table
 
 1. Duplicate this example Google Sheet: https://docs.google.com/spreadsheets/d/13LO5K6LWSQvHAD83fOeDO7pSKGKD-tKEgeb0qhgggys/edit#gid=0
 2. Input your data and edit options (see below for explanation of the options)
@@ -9,7 +9,6 @@ Create sortable, searchable tables from Google Sheets.
 4. You should see your Google Sheet appear in the list. Click publish to push your current data live. 
 5. Click the 'table url' button to get a link to the interactive table for your data.
 6. Embed this url into a Composer article
-7. 
 
 ## What are the options?
 
