@@ -1,6 +1,45 @@
-# interactive-table-builder 
-Guardian interactive project.
+# Interactive Table Builder  
+Create sortable, searchable tables from Google Sheets.
 
+## Creating your table
+
+1. Duplicate this example Google Sheet: https://docs.google.com/spreadsheets/d/13LO5K6LWSQvHAD83fOeDO7pSKGKD-tKEgeb0qhgggys/edit#gid=0
+2. Input your data and edit options (see below for explanation of the options)
+3. Go to http://visuals.gutools.co.uk/docs and share your Google Sheet with the address at the top
+4. You should see your Google Sheet appear in the list. Click publish to push your current data live. 
+5. Click the 'table url' button to get a link to the interactive table for your data.
+6. Embed this url into a Composer article
+7. 
+
+## What are the options?
+
+### Set a title and subtitle
+These are both set in the 'tableMeta' sheet of your duplicated Google Sheet. 
+
+### Highlight rows
+To specific rows, add an extra column to the end of your dataset in the tableDataSheet sheet with the header 'Highlight'. Write yes for each row you wish to highlight.
+
+### Bold columns
+To make a column's text bold, just prefix the column's header name with [bold]
+For example, if you want to bold a column titled 'Scores', you would rename it to '[bold]Scores'.
+Note that [bold] will not display on the rendered table.
+
+### Truncate the number of rows
+For long tables, it's sometimes preferable to initially show only a limited number of rows.
+In the 'tableMeta' sheet you can set a 'rowLimit' and a 'mobileRowLimit' independently. This limits the number of rows shown on desktop and mobile respectively. If you do not wish to truncate the table, set these values to FALSE.
+
+### Toggle whether a table is searchable
+You can turn off the search field by setting the 'searchable' value to FALSE in the 'tableMeta' sheet of your Google Sheet.
+
+### Sparklines
+Any table cell can contain a sparkline. Sparkline data is automatically converted into a sparkline if entered in the following format: 
+```
+[sparkline=100,101,102,110,122,145,155,150,192,153,140,141,140]
+```
+
+You can normalise the scale for all the sparklines on the sheet by setting the 'normaliseSparklines' setting in the 'tableMeta' sheet to TRUE
+
+# Development
 ## Getting started
 If you haven't already installed [nodejs](http://nodejs.org/download/),
 [grunt-cli](http://gruntjs.com/getting-started) and [bower](http://bower.io/)
