@@ -22,6 +22,8 @@
     "pasteup-buttons": "~0.4.12",
     "ractive": "0.6.1",
     "requirejs-plugins": "1.0.3",
-    "text": "2.0.10"
+    "text": "2.0.10",
+    "reqwest": "2.0.1",
+    "mustache": "2.1.3"
   }
 }

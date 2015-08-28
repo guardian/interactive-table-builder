@@ -24,19 +24,24 @@ define([
         averages = [],
         percentages = [],
         highlighted = {},
+        numberCount,
         highlightedFunc = function() {
             if (highlighted[this[0]]) {
                 return "highlighted"
             };
-        };
+        },
+        sparkMax,
+        sparkMin,
+        sparklineVals = [],
+        boldColumns = [];
 
     function init(el, spreadsheetID) {
         reqwest({
-            url: "http://interactive.guim.co.uk/docsdata-test/" + spreadsheetID + ".json",
+            url: "https://interactive.guim.co.uk/docsdata/" + spreadsheetID + ".json",
             type: "json",
             method: "get",
             success: function(resp) {
-                app(resp, el)
+                app(resp, el);
             }
         })
     }
@@ -49,22 +54,61 @@ define([
         formattedData = data.sheets.tableDataSheet.slice(1);
 
         // convert highlight column into usable format and pop
-        if(headerRows[headerRows.length-1] === "highlight") {
+        if (headerRows[headerRows.length - 1] === "highlight") {
             formattedData.map(function(row) {
-                highlighted[row[0]] = row[headerRows.length-1];
+                highlighted[row[0]] = row[headerRows.length - 1];
                 row.pop();
             });
             headerRows.pop();
         }
 
+        //bold columns 
+        headerRows.map(function(header, i) {
+            if(header.toString().slice(0, 6) === "[bold]") {
+                // console.log(header.toString().slice(6));
+                boldColumns.push(i);
+                headerRows[i] = header.toString().slice(6);
+            }
+        });
+
         //init Sparklines
+        if(data.sheets.tableMeta[0].normaliseSparklines === "TRUE") {
+            formattedData.map(function(row, i) {
+                row.map(function(cell, j) {
+                    if (cell.toString().slice(0, 11) === "[sparkline=") {
+                        var split = cell.substr(11).slice(0, -1).split(",");
+                        split.map(function(val) {
+                            sparklineVals.push(val.trim());
+                        });
+                    }
+                });
+            });
+
+            sparkMin = Math.min.apply(null, sparklineVals);
+            sparkMax = Math.max.apply(null, sparklineVals);
+        }
+
         formattedData.map(function(row, i) {
             row.map(function(cell, j) {
-                if(cell.toString().slice(0, 11) === "[sparkline=") {
+                if (cell.toString().slice(0, 11) === "[sparkline=") {
                     formattedData[i][j] = draw(cell.substr(11).slice(0, -1));
                 }
             });
         });
+
+        //which rows are columns of numbers?
+        numberCount = [];
+        formattedData.map(function(row, i) {
+            row.map(function(cell, j) {
+                if (!numberCount[j]) {
+                    numberCount[j] = 0
+                };
+                if (typeof cell === "string" && !isNaN(parseInt(cell))) {
+                    numberCount[j]++;
+                }
+            });
+        });
+
 
         var tableRendered = Mustache.render(template, {
             rows: formattedData,
@@ -101,7 +145,7 @@ define([
             e.target.className = "column-header sorted";
             reversed = false;
         }
-        if(!hasClass(tableEl,"table-sorted")) {
+        if (!hasClass(tableEl, "table-sorted")) {
             tableEl.className = "table-sorted";
         }
         lastSorted = e.target;
@@ -109,7 +153,7 @@ define([
     }
 
     function propComparator(prop) {
-        var c,d;
+        var c, d;
         currentSort = (currentSort !== prop) ? prop : null;
         return function Comparator(a, b) {
             c = (typeof a[prop] === "string" && !isNaN(parseInt(a[prop]))) ? parseInt(a[prop].replace(/,/g, '')) : a[prop]; //refactor
@@ -125,7 +169,7 @@ define([
             searchEl = document.getElementById("search-field");
             searchEl.addEventListener("keyup", render);
             searchEl.addEventListener("focus", function() {
-                if(this.value === "Search") {
+                if (this.value === "Search") {
                     this.value = "";
                 }
             });
@@ -138,7 +182,7 @@ define([
     }
 
     function render() {
-        var rowsToRender = (searchEl.value !== "Search" && searchEl.value !== "") ? formattedData.filter(searchMatch) : formattedData,
+        var rowsToRender = (searchEl && searchEl.value !== "Search" && searchEl.value !== "") ? formattedData.filter(searchMatch) : formattedData,
             emptyBoolean = (rowsToRender.length > 0) ? false : true,
             rendered = Mustache.render(template, {
                 rows: rowsToRender,
@@ -165,15 +209,27 @@ define([
 
         css += "}";
 
-        if(data.sheets.tableMeta[0].rowLimit.toString().toLowerCase() !== "false" && data.sheets.tableMeta[0].rowLimit > 0) {
-            var wrapperEl = document.getElementById("int-table__wrapper");
+        if ((data.sheets.tableMeta[0].rowLimit.toString().toLowerCase() !== "false" && data.sheets.tableMeta[0].rowLimit > 0) || window.innerWidth < 620) {
+            var wrapperEl = document.getElementById("int-table__wrapper"),
+                rowLimit = (window.innerWidth > 620) ? parseInt(data.sheets.tableMeta[0].rowLimit) + 1 : parseInt(data.sheets.tableMeta[0].mobileRowLimit) + 1;
+
             wrapperEl.className = "truncated";
-            css += ".truncated tr:nth-of-type(1n+" + (parseInt(data.sheets.tableMeta[0].rowLimit)+1) + ") { display: none; }";
+            css += ".truncated tr:nth-of-type(1n+" + rowLimit + ") { display: none; }";
 
             document.getElementById("untruncate").addEventListener("click", function() {
                 wrapperEl.className = "";
             });
         }
+
+        numberCount.map(function(columnNumberCount, i) {
+            if (columnNumberCount > formattedData.length / 2) {
+                css += "@media (min-width: 30em) { tr td:nth-of-type(" + (i + 1) + "), tr th:nth-of-type(" + (i + 1) + ") { text-align: right; } }";
+            }
+        });
+
+        boldColumns.map(function(column) {
+            css += "@media (min-width: 30em) { tr td:nth-of-type(" + (column + 1) + "), tr th:nth-of-type(" + (column + 1) + ") { font-weight: bold !important; } }";
+        });
 
         style.type = 'text/css';
 
@@ -190,7 +246,7 @@ define([
         var c = 0;
 
         for (var a = 0; a < array.length; a++) {
-            c = (array[a].toString().substr(0,4) !== "<svg" && array[a].toString().toLowerCase().indexOf(searchEl.value.toLowerCase()) !== -1) ? c + 1 : c;
+            c = (array[a].toString().substr(0, 4) !== "<svg" && array[a].toString().toLowerCase().indexOf(searchEl.value.toLowerCase()) !== -1) ? c + 1 : c;
         }
 
         return (c > 0) ? true : false;
@@ -207,12 +263,12 @@ define([
     }
 
     function scale(max, min, num) {
-        return (100 * (num - min) / (max - min)) || 0;
+        return (data.sheets.tableMeta[0].normaliseSparklines === "TRUE") ? (100 * (num - sparkMin) / (sparkMax - sparkMin)) : (100 * (num - min) / (max - min));
     }
 
     function draw(dataString) {
         var elem = document.createElement("svg"),
-            dotSize = 1,
+            dotSize = 2,
             data = dataString
             .split(",")
             .map(function(n) {
@@ -255,8 +311,26 @@ define([
             ln.setAttribute("y1", y1 + "%");
             ln.setAttribute("y2", y2 + "%");
             ln.setAttribute("stroke", color);
-            ln.setAttribute("stroke-width", "1.25");
+            ln.setAttribute("stroke-width", "1.5");
             elem.appendChild(ln);
+            if (show_current && i + 1 === parts.length) {
+                var circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                circle.setAttribute("cx", x2 + "%");
+                circle.setAttribute("cy", y2 + "%");
+                circle.setAttribute("r", dotSize + "%");
+                circle.setAttribute("fill", "rgb(75, 198, 223)");
+                circle.setAttribute("stroke", "rgb(75, 198, 223)");
+                elem.appendChild(circle);
+                var text = document.createElementNS('http://www.w3.org/2000/svg', 'text'),
+                    tx = (x2 + (dotSize * 1.5)) + "%",
+                    ty = (y2 < 25) ? "25%" : (y2 + 12) + "%";
+                text.setAttribute('x', tx);
+                text.setAttribute('y', ty);
+                text.setAttribute('fill', '#000');
+                text.setAttribute('style', 'font-size: 10px; fill: #bdbdbd; font-weight: 400;')
+                text.textContent = data.slice(-1)[0];
+                elem.appendChild(text);
+            }
         }
         return elem.outerHTML;
     }

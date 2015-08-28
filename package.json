@@ -10,7 +10,7 @@
   "license": "Apache 2.0",
   "config": {
     "port": 9000,
-    "s3_folder": "2015/07/table-testing/"
+    "s3_folder": "tools/tables/"
   },
   "devDependencies": {
     "grunt": "^0.4.5",
