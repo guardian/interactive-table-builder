@@ -95,6 +95,7 @@ $guss-webfonts-base-url: '//pasteup.guim.co.uk/fonts/';
 
 	#int-table__wrapper {
 		position: relative;
+		overflow: auto;
 
 		#untruncate {
 			display: none;

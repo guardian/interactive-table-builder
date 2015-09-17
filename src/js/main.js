@@ -43,7 +43,7 @@ define([
             success: function(resp) {
                 app(resp, el);
             }
-        })
+        });
     }
 
     function app(spreadsheet, el) {
@@ -156,8 +156,8 @@ define([
         var c, d;
         currentSort = (currentSort !== prop) ? prop : null;
         return function Comparator(a, b) {
-            c = (typeof a[prop] === "string" && !isNaN(parseInt(a[prop]))) ? parseInt(a[prop].replace(/,/g, '')) : a[prop]; //refactor
-            d = (typeof b[prop] === "string" && !isNaN(parseInt(b[prop]))) ? parseInt(b[prop].replace(/,/g, '')) : b[prop];
+            c = (typeof a[prop] === "string" && !isNaN(parseFloat(a[prop]))) ? parseFloat(a[prop].replace(/,/g, '')) : a[prop]; //refactor
+            d = (typeof b[prop] === "string" && !isNaN(parseFloat(b[prop]))) ? parseFloat(b[prop].replace(/,/g, '')) : b[prop];
             if (c < d) return (currentSort !== prop) ? -1 : 1;
             if (c > d) return (currentSort !== prop) ? 1 : -1;
             return 0;
