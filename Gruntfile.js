@@ -8,6 +8,8 @@ var localAssetPath = 'http://localhost:' + pkg.config.port + '/assets';
 
 module.exports = function(grunt) {
   var isDev = !(grunt.cli.tasks && grunt.cli.tasks[0] === 'deploy');
+  require('jit-grunt')(grunt);
+
   grunt.initConfig({
 
     connect: {
@@ -17,7 +19,7 @@ module.exports = function(grunt) {
           hostname: '*',
           base: './build/',
           middleware: function (connect, options, middlewares) {
-            // inject a custom middleware http://stackoverflow.com/a/24508523 
+            // inject a custom middleware http://stackoverflow.com/a/24508523
             middlewares.unshift(function (req, res, next) {
                 res.setHeader('Access-Control-Allow-Origin', '*');
                 res.setHeader('Access-Control-Allow-Methods', '*');
@@ -61,7 +63,7 @@ module.exports = function(grunt) {
     jshint: {
       options: {
           jshintrc: true,
-          force: true 
+          force: true
       },
         files: [
             'Gruntfile.js',
@@ -160,7 +162,7 @@ module.exports = function(grunt) {
             options: {
                 patterns: [{
                   match: /@@assetPath@@/g,
-                  replacement: deployAssetPath 
+                  replacement: deployAssetPath
                 }]
             },
             files: [{
@@ -228,23 +230,6 @@ module.exports = function(grunt) {
 
   });
 
-  // Task pluginsk
-  grunt.loadNpmTasks('grunt-contrib-jshint');
-  grunt.loadNpmTasks('grunt-contrib-connect');
-  grunt.loadNpmTasks('grunt-contrib-requirejs');
-  grunt.loadNpmTasks('grunt-contrib-sass');
-  grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('grunt-contrib-clean');
-  grunt.loadNpmTasks('grunt-contrib-copy');
-  grunt.loadNpmTasks('grunt-contrib-imagemin');
-  grunt.loadNpmTasks('grunt-aws');
-  grunt.loadNpmTasks('grunt-autoprefixer');
-  grunt.loadNpmTasks('grunt-replace');
-  grunt.loadNpmTasks('grunt-contrib-rename');
-  grunt.loadNpmTasks('grunt-bower-requirejs');
-  grunt.loadNpmTasks('grunt-newer');
-
-  // Tasks
   grunt.registerTask('build', [
     'jshint',
     'clean',
@@ -255,14 +240,14 @@ module.exports = function(grunt) {
     'copy',
     'newer:imagemin'
   ]);
-  
+
   grunt.registerTask('default', [
       'build',
       'replace:local',
       'connect',
       'watch'
   ]);
-  
+
   grunt.registerTask('deploy', [
       'build',
       'rename',
