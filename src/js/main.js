@@ -107,7 +107,7 @@ define([
                 if (match) {
                     var value = parseFloat(match[1]);
                     var valueStr = value.toFixed(1);
-                    row[colnum] = '<div data-val="' + pad(value, 3, '0') + '" class="percentagebar"><span style="width: ' + valueStr + '%;"></span><span>' + valueStr + '%</span></div>';
+                    row[colnum] = '<div data-val="' + pad(value.toFixed(10), 14, '0') + '" class="percentagebar"><span style="width: ' + valueStr + '%;"></span><span>' + valueStr + '%</span></div>';
                 } else {
                     row[colnum] = 'N/A'
                 }
