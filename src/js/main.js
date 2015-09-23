@@ -21,11 +21,9 @@ define([
         lastSorted,
         searchable,
         searchEl,
-        averages = [],
-        percentages = [],
         highlighted = {},
         numberCount,
-        highlightedFunc = function() {
+            highlightedFunc = function() {
             if (highlighted[this[0]]) {
                 return "highlighted"
             };
@@ -33,7 +31,7 @@ define([
         sparkMax,
         sparkMin,
         sparklineVals = [],
-        boldColumns = [];
+        specialColumns = {'bold': [], 'percentagebar': []};
 
     function init(el, spreadsheetID) {
         reqwest({
@@ -44,6 +42,12 @@ define([
                 app(resp, el);
             }
         });
+    }
+
+    function pad(n, width, z) {
+        z = z || '0';
+        n = n + '';
+        return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
     }
 
     function app(spreadsheet, el) {
@@ -62,12 +66,13 @@ define([
             headerRows.pop();
         }
 
-        //bold columns 
         headerRows.map(function(header, i) {
-            if(header.toString().slice(0, 6) === "[bold]") {
-                // console.log(header.toString().slice(6));
-                boldColumns.push(i);
-                headerRows[i] = header.toString().slice(6);
+            // find special columns (e.g. bold / percentagebars / etc) and
+            // remove diretive prefixes from output
+            var match = /\[(\w+)\].+/.exec(header);
+            if (match && specialColumns[match[1]]) {
+                specialColumns[match[1]].push(i);
+                headerRows[i] = header.toString().slice(match[1].length + 2);
             }
         });
 
@@ -93,6 +98,20 @@ define([
                 if (cell.toString().slice(0, 11) === "[sparkline=") {
                     formattedData[i][j] = draw(cell.substr(11).slice(0, -1));
                 }
+            });
+        });
+
+        specialColumns.percentagebar.map(function(colnum) {
+            formattedData.map(function(row, i) {
+                var match = /^(\d*(?:\.\d+)?)%?$/.exec(row[colnum]);
+                if (match) {
+                    var value = parseFloat(match[1]);
+                    var valueStr = value.toFixed(1);
+                    row[colnum] = '<div data-val="' + pad(value, 3, '0') + '" class="percentagebar"><span style="width: ' + valueStr + '%;"></span><span>' + valueStr + '%</span></div>';
+                } else {
+                    row[colnum] = 'N/A'
+                }
+
             });
         });
 
@@ -227,7 +246,7 @@ define([
             }
         });
 
-        boldColumns.map(function(column) {
+        specialColumns.bold.map(function(column) {
             css += "@media (min-width: 30em) { tr td:nth-of-type(" + (column + 1) + "), tr th:nth-of-type(" + (column + 1) + ") { font-weight: bold !important; } }";
         });
 
