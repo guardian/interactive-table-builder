@@ -4,4 +4,4 @@ build/
 temp/
 .DS_Store
 .sass-cache/
-npm-debug.log
+*.log
