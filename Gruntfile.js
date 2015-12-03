@@ -142,20 +142,6 @@ module.exports = function(grunt) {
       }
     },
 
-    imagemin: {
-      options: {
-        optimizationLevel: 3,
-        svgoPlugins: [{ removeViewBox: false }],
-      },
-      dynamic: {
-        files: [{
-          expand: true,
-          cwd: 'src/',
-          src: ['imgs/**/*.{png,jpg,gif,svg}'],
-          dest: 'build/assets/'
-        }]
-      }
-    },
 
     replace: {
         prod: {
@@ -237,9 +223,8 @@ module.exports = function(grunt) {
     'autoprefixer',
     'bowerRequirejs',
     'requirejs',
-    'copy',
-    'newer:imagemin'
-  ]);
+    'copy'
+      ]);
 
   grunt.registerTask('default', [
       'build',

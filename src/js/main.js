@@ -199,16 +199,24 @@ define([
             });
         }
     }
+    
+    function removeGradient () {
+        var gradient = document.getElementsByClassName("truncated")[0];
+        if (gradient !== undefined) {gradient.className = "" };  
+    }
+    
 
     function render() {
         var rowsToRender = (searchEl && searchEl.value !== "Search" && searchEl.value !== "") ? formattedData.filter(searchMatch) : formattedData,
             emptyBoolean = (rowsToRender.length > 0) ? false : true,
+            exactMatch = (rowsToRender.length === 1) ? true : false,
             rendered = Mustache.render(template, {
                 rows: rowsToRender,
                 highlightClass: highlightedFunc,
-                emptyBoolean: emptyBoolean
+                emptyBoolean: emptyBoolean,
+                exactMatch: exactMatch
             });
-
+        if (exactMatch) { removeGradient() };    
         tbodyEl.innerHTML = rendered;
     }
 
