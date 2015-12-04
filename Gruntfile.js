@@ -9,6 +9,7 @@ var localAssetPath = 'http://localhost:' + pkg.config.port + '/assets';
 module.exports = function(grunt) {
   var isDev = !(grunt.cli.tasks && grunt.cli.tasks[0] === 'deploy');
   require('jit-grunt')(grunt);
+  grunt.loadNpmTasks('grunt-aws');
 
   grunt.initConfig({
 
