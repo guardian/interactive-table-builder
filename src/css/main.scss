@@ -10,28 +10,45 @@ $guss-webfonts-base-url: '//pasteup.guim.co.uk/fonts/';
 @import 'modules/mq';
 
 .element-interactive {
+	.collapse-true {
+		@include mq($until: mobileLandscape)  {
+			table, thead, tbody, th, td, tr {
+				display: block;
+			}
 
-	@include mq($until: mobileLandscape)  {
-		table, thead, tbody, th, td, tr {
-			display: block;
+			thead tr {
+				position: absolute;
+				top: -9999px;
+				left: -9999px;
+			}
+
+			th {
+				border-bottom: none;
+				vertical-align: top;
+			}
+
+
+			td {
+				border: none;
+				border-bottom: 0 !important;
+				position: relative;
+			}
+
+			tr td {
+				padding: 0;
+			}
 		}
 
-		thead tr {
-			position: absolute;
-			top: -9999px;
-			left: -9999px;
+		table {
+			border-collapse: collapse;
+			width: 100%;
 		}
 
-		th {
-			border-bottom: none;
-			vertical-align: top;
-		}
-
-
-		td {
-			border: none;
-			border-bottom: 0 !important;
-			position: relative;
+		tr {
+			@include mq($until: mobileLandscape) {
+				padding: 12px 0;
+				border-bottom: 1px solid #dcdcdc;
+			}
 		}
 	}
 
@@ -39,20 +56,12 @@ $guss-webfonts-base-url: '//pasteup.guim.co.uk/fonts/';
 		padding: 6px 20px 6px 0;
 	}
 
-	table {
-		border-collapse: collapse;
-		width: 100%;
-	}
-
-	tr {
-		@include mq($until: mobileLandscape) {
-			padding: 12px 0;
-			border-bottom: 1px solid #dcdcdc;
-		}
-	}
-
 	.highlighted {
 		background-color: #edf9fc;
+	}
+
+	table {
+		width: 100%;
 	}
 
 	tr td {
@@ -63,10 +72,6 @@ $guss-webfonts-base-url: '//pasteup.guim.co.uk/fonts/';
   		line-height: 16px;
   		color: #676767;
   		border-bottom: 1px dotted #f1f1f1;
-
-  		@include mq($until: mobileLandscape) {
-  			padding: 0;
-  		}
 	}
 
 	.int-table-title {
@@ -187,30 +192,30 @@ $guss-webfonts-base-url: '//pasteup.guim.co.uk/fonts/';
 th.column-header.sorted::before {
 	opacity: 1;
 	top: 11px;
-	border-top: 4px solid #333;
+	border-top: 4px solid #767676;
 	opacity: 1;
 }
 
 th.column-header.sorted::after {
 	opacity: 0;
-	border-bottom: 4px solid #333;
+	border-bottom: 4px solid #767676;
 }
 
 th.column-header.sorted-reversed::before {
-	border-top: 4px solid #333;
+	border-top: 4px solid #767676;
 	opacity: 0;
 }
 
 th.column-header.sorted-reversed::after {
 	display: block;
 	top: 11px;
-	border-bottom: 4px solid #333;
+	border-bottom: 4px solid #767676;
 	opacity: 1;
 }
 
 th.column-header.sorted, th.column-header.sorted-reversed {
-	border-bottom: 2px solid #333;
-	font-weight: 600 !important;
+	// border-bottom: 2px solid #333;
+	// font-weight: 600 !important;
 }
 
 #search-field {

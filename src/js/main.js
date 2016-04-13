@@ -31,7 +31,7 @@ define([
         sparkMax,
         sparkMin,
         sparklineVals = [],
-        specialColumns = {'bold': [], 'percentagebar': []};
+        specialColumns = {'bold': [], 'percentagebar': [], 'desc': [], 'asc': []};
 
     function init(el, spreadsheetID) {
         reqwest({
@@ -128,6 +128,7 @@ define([
             });
         });
 
+        var collapseMobile = (spreadsheet.sheets.tableMeta[0].mobileCollapse && spreadsheet.sheets.tableMeta[0].mobileCollapse === "FALSE") ? "collapse-false" : "collapse-true";
 
         var tableRendered = Mustache.render(template, {
             rows: formattedData,
@@ -136,7 +137,8 @@ define([
         var metaRendered = Mustache.render(metaTemplate, {
             meta: data.sheets.tableMeta[0],
             headerRows: headerRows,
-            searchable: searchable
+            searchable: searchable,
+            collapseMobile: collapseMobile
         });
         el.innerHTML = metaRendered;
 
@@ -146,9 +148,19 @@ define([
 
         initSearch();
 
-        addMobilePrefix();
+        addMobilePrefix(collapseMobile);
 
         document.querySelector("tr").addEventListener("click", sortColumns);
+
+        var headers = document.querySelectorAll(".column-header");
+
+        specialColumns.desc.map(function(colnum) {
+            headers[colnum].className += " sorted";
+        });
+
+        specialColumns.asc.map(function(colnum) {
+            headers[colnum].className += " sorted-reversed";
+        });
     }
 
     function sortColumns(e) {
@@ -220,45 +232,48 @@ define([
         tbodyEl.innerHTML = rendered;
     }
 
-    function addMobilePrefix() {
+    function addMobilePrefix(collapseMobile) {
         var css = "",
             head = document.head || document.getElementsByTagName('head')[0],
             style = document.createElement('style'),
             d = 1,
             e = 1;
 
-        css = "@media (max-width: 30em) {";
+        if(collapseMobile === "collapse-true") {
+            css = "@media (max-width: 30em) {";
 
-        headerRows.map(function(name) {
-            css += "tr td:nth-child(" + d + ")::before { content: '" + name + ": '; font-weight: 500; }";
-            d++;
+            headerRows.map(function(name) {
+                css += "tr td:nth-child(" + d + ")::before { content: '" + name + ": '; font-weight: 500; }";
+                d++;
+            });
+
+            css += "}";
+        }
+
+        numberCount.map(function(columnNumberCount, i) {
+            if (columnNumberCount > formattedData.length / 2) {
+                css += "tr td:nth-of-type(" + (i + 1) + "), tr th:nth-of-type(" + (i + 1) + ") { text-align: right; }";
+            }
         });
-
-        css += "}";
 
         if ((data.sheets.tableMeta[0].rowLimit.toString().toLowerCase() !== "false" && data.sheets.tableMeta[0].rowLimit > 0) || window.innerWidth < 620) {
             var wrapperEl = document.getElementById("int-table__wrapper"),
                 rowLimit = (window.innerWidth > 620) ? parseInt(data.sheets.tableMeta[0].rowLimit) + 1 : parseInt(data.sheets.tableMeta[0].mobileRowLimit) + 1;
 
-            wrapperEl.className = "truncated";
+            wrapperEl.classList.add("truncated");
             css += ".truncated tr:nth-of-type(1n+" + rowLimit + ") { display: none; }";
 
             document.getElementById("untruncate").addEventListener("click", function() {
-                wrapperEl.className = "";
+                wrapperEl.classList.remove("truncated");
             });
         }
-
-        numberCount.map(function(columnNumberCount, i) {
-            if (columnNumberCount > formattedData.length / 2) {
-                css += "@media (min-width: 30em) { tr td:nth-of-type(" + (i + 1) + "), tr th:nth-of-type(" + (i + 1) + ") { text-align: right; } }";
-            }
-        });
 
         specialColumns.bold.map(function(column) {
             css += "@media (min-width: 30em) { tr td:nth-of-type(" + (column + 1) + "), tr th:nth-of-type(" + (column + 1) + ") { font-weight: bold !important; } }";
         });
 
         style.type = 'text/css';
+
 
         if (style.styleSheet) {
             style.styleSheet.cssText = css;
