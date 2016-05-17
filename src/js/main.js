@@ -25,6 +25,7 @@ define([
         numberCount,
             highlightedFunc = function() {
             if (highlighted[this[0]]) {
+                console.log(highlighted);
                 return "highlighted"
             };
         },
@@ -61,7 +62,8 @@ define([
         if (headerRows[headerRows.length - 1] === "highlight") {
             formattedData.map(function(row) {
                 highlighted[row[0]] = row[headerRows.length - 1];
-                row.pop();
+                console.log(row);
+                // row.pop();
             });
             headerRows.pop();
         }
