@@ -30,6 +30,14 @@ In the 'tableMeta' sheet you can set a 'rowLimit' and a 'mobileRowLimit' indepen
 ### Toggle whether a table is searchable
 You can turn off the search field by setting the 'searchable' value to FALSE in the 'tableMeta' sheet of your Google Sheet.
 
+### Toggle whether the table collapses to rows on mobile
+Add a field to the tableMeta sheet called "mobileCollapse" and set it to FALSE
+
+e.g. https://docs.google.com/spreadsheets/d/1H8THCxCZNTmYvmEBY6QRWT_EgqPak2GZWLkYxAEmjVo/edit#gid=1312491834
+
+### Mark which column the table is sorted by
+Add [asc] or [desc] before the column name that you want to mark. Note: this doesn't actually sort the columns, just adds the visual indicator
+
 ### Sparklines
 Any table cell can contain a sparkline. Sparkline data is automatically converted into a sparkline if entered in the following format: 
 ```
