@@ -239,6 +239,7 @@ th.column-header.sorted, th.column-header.sorted-reversed {
 }
 
 .column svg {
+	overflow: visible;
 	width: 120px;
 	height: 26px;
 	display: block;
