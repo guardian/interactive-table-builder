@@ -317,8 +317,8 @@ define([
                 return parseFloat(n.trim(), 10) || 0;
             }),
             range = 96,
-            color = "rgb(75, 198, 223)",
-            maxmin_color = "rgb(0, 86, 137)",
+            color = "#c70000",
+            maxmin_color = "#c70000",
             show_max = false,
             show_min = false,
             show_color = false,
@@ -360,8 +360,8 @@ define([
                 circle.setAttribute("cx", x2 + "%");
                 circle.setAttribute("cy", y2 + "%");
                 circle.setAttribute("r", dotSize + "%");
-                circle.setAttribute("fill", "rgb(75, 198, 223)");
-                circle.setAttribute("stroke", "rgb(75, 198, 223)");
+                circle.setAttribute("fill", "#c70000");
+                circle.setAttribute("stroke", "#c70000");
                 elem.appendChild(circle);
                 var text = document.createElementNS('http://www.w3.org/2000/svg', 'text'),
                     tx = (x2 + (dotSize * 1.5)) + "%",
