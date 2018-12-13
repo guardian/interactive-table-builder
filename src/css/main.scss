@@ -76,7 +76,7 @@ $guss-webfonts-base-url: '//pasteup.guim.co.uk/fonts/';
 	tr td {
 		vertical-align: top;
 		padding: 6px 20px 6px 0;
-		font-family: "Guardian Text Sans Web";
+		font-family: "Guardian Text Egyptian Web";
   		font-size: 12px;
   		line-height: 16px;
   		color: #676767;
@@ -143,11 +143,11 @@ $guss-webfonts-base-url: '//pasteup.guim.co.uk/fonts/';
 
 .column-header {
 	text-align: left;
-	color: #767676 !important;
-	font-family: "Guardian Text Sans Web", sans-serif !important;
-	font-size: 12px !important;
-	font-weight: 300 !important;
+	color: #000 !important;
+	font-family: "GH Guardian Headline", sans-serif !important;
+	font-size: 13px !important;
 	vertical-align: top;
+	font-weight: bold;
 	line-height: 12px;
 	border-bottom: 2px solid #bdbdbd;
 	position: relative;
@@ -275,7 +275,7 @@ figure {
     border-radius: 100px;
     color: white;
     display: inline-block;
-    font-family: 'Guardian Text Sans Web', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
+    font-family: 'Guardian Text Egyptian Web', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
     font-size: 14px;
     font-weight: 500;
     height: 30px;
