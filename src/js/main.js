@@ -369,7 +369,7 @@ define([
                 text.setAttribute('x', tx);
                 text.setAttribute('y', ty);
                 text.setAttribute('fill', '#000');
-                text.setAttribute('style', 'font-size: 10px; fill: #bdbdbd; font-weight: 400;')
+                text.setAttribute('style', 'font-size: 11px; fill: #333333; font-weight: 400;')
                 text.textContent = data.slice(-1)[0];
                 elem.appendChild(text);
             }
