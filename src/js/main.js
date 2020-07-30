@@ -17,6 +17,7 @@ define([
         data,
         tbodyEl,
         tableEl,
+        headers,
         currentSort,
         lastSorted,
         searchable,
@@ -52,6 +53,8 @@ define([
 
     function app(spreadsheet, el) {
         data = spreadsheet;
+
+        //console.log(data);
         searchable = (data.sheets.tableMeta[0].searchable.toLowerCase() === 'true');
 
         headerRows = data.sheets.tableDataSheet[0];
@@ -70,6 +73,7 @@ define([
             // find special columns (e.g. bold / percentagebars / etc) and
             // remove diretive prefixes from output
             var match = /\[(\w+)\].+/.exec(header);
+            console.log(match);
             if (match && specialColumns[match[1]]) {
                 specialColumns[match[1]].push(i);
                 headerRows[i] = header.toString().slice(match[1].length + 2);
@@ -152,23 +156,54 @@ define([
 
         document.querySelector("tr").addEventListener("click", sortColumns);
 
-        var headers = document.querySelectorAll(".column-header");
+        headers = document.querySelectorAll(".column-header");
 
-        specialColumns.desc.map(function(colnum) {
-            headers[colnum].className += " sorted";
-        });
+        // specialColumns.desc.map(function(colnum) {
+        //     console.log(colnum);
+        //     headers[colnum].className += " sorted";
+        // });
 
-        specialColumns.asc.map(function(colnum) {
+        //console.log(specialColumns.asc);
+
+        // specialColumns.asc.map(function(colnum) {
+        //     headers[colnum].className += " sorted-reversed";
+        //     console.log(colnum);
+        // });
+
+        var colnum;
+
+        if (specialColumns.desc.length == 0 && specialColumns.asc.length > 0) {
+
+            colnum = specialColumns.asc[0];
             headers[colnum].className += " sorted-reversed";
-        });
+            lastSorted = headers[colnum];
+            currentSort = colnum;
+
+        }
+
+        if (specialColumns.desc.length > 0) {
+
+            colnum = specialColumns.desc[0];
+            headers[colnum].className += " sorted";
+            lastSorted = headers[colnum];
+            currentSort = colnum;
+
+        }
     }
 
     function sortColumns(e) {
+
         formattedData = formattedData.sort(propComparator(e.target.cellIndex));
 
-        if (lastSorted) {
-            lastSorted.className = "column-header";
+        for (var h = 0; h < headers.length; h++) {
+
+            headers[h].className = "column-header";
+
         }
+
+        // if (lastSorted) {
+        //     lastSorted.className = "column-header";
+        // }
         if (lastSorted === e.target && reversed === false) {
             e.target.className = "column-header sorted-reversed";
             reversed = true;
@@ -189,9 +224,15 @@ define([
         return function Comparator(a, b) {
             c = (typeof a[prop] === "string" && !isNaN(parseFloat(a[prop]))) ? parseFloat(a[prop].replace(/,/g, '')) : a[prop]; //refactor
             d = (typeof b[prop] === "string" && !isNaN(parseFloat(b[prop]))) ? parseFloat(b[prop].replace(/,/g, '')) : b[prop];
+            if (("" + c).substring(0, 5) == "<svg>") { // its a sparkline
+                if (c < d) return (currentSort !== prop) ? 1 : -1;
+                if (c > d) return (currentSort !== prop) ? -1 : 1;
+                return 0;
+            } else {
             if (c < d) return (currentSort !== prop) ? -1 : 1;
             if (c > d) return (currentSort !== prop) ? 1 : -1;
             return 0;
+            }
         }
     }
 
@@ -252,7 +293,7 @@ define([
 
         numberCount.map(function(columnNumberCount, i) {
             if (columnNumberCount > formattedData.length / 2) {
-                css += "tr td:nth-of-type(" + (i + 1) + "), tr th:nth-of-type(" + (i + 1) + ") { text-align: right; }";
+                //css += "tr td:nth-of-type(" + (i + 1) + "), tr th:nth-of-type(" + (i + 1) + ") { text-align: right; }";
             }
         });
 

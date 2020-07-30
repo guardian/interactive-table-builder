@@ -55,8 +55,8 @@ $guss-webfonts-base-url: '//pasteup.guim.co.uk/fonts/';
 
 		tr {
 			@include mq($until: mobileLandscape) {
-				padding: 2px 0 12px 0;
-				border-bottom: 1px solid #dcdcdc;
+				padding: 4px 4px 12px 4px;
+				//border-bottom: 1px solid #dcdcdc;
 			}
 		}
 	}
@@ -67,12 +67,16 @@ $guss-webfonts-base-url: '//pasteup.guim.co.uk/fonts/';
 
 	tr th {
 		padding: 6px 20px 6px 0;
+
+		&:nth-of-type(1) {
+			padding: 6px 20px 6px 10px;
+		}
 	}
 
 	.highlighted {
 		//background-color: #ffe500;
-		background-color:#f6f6f6;
-		background-color:#dcdcdc;
+		//background-color:#f6f6f6;
+		//background-color:#dcdcdc;
 		background-color:#ffe500;
 		//background-color:#999999;
 		//border-top: 1px solid #999;
@@ -83,19 +87,29 @@ $guss-webfonts-base-url: '//pasteup.guim.co.uk/fonts/';
 	}
 
 	tr td {
-		vertical-align: top;
+		//vertical-align: top;
 		padding: 6px 20px 6px 0;
 		font-family: "Guardian Text Sans Web";
   		font-size: 13px;
   		line-height: 16px;
 		  color: #333;
 		  text-shadow: 0 0 2px rgba(255,255,255,0.3);
+		  &:nth-of-type(1) {
+			padding: 6px 20px 6px 10px;
+			font-weight: 500;
+			color: #121212;
+			}
 		 
 	}
 
 	tr {
 		background-color: #f6f6f6;
-		border-bottom: 1px dotted #dcdcdc;
+		//border-bottom: 1px dotted #dcdcdc;
+
+		&:nth-of-type(odd) {
+		background-color:#eaeaea;
+
+		}
 
 		
 	}
@@ -105,27 +119,41 @@ $guss-webfonts-base-url: '//pasteup.guim.co.uk/fonts/';
 	}
 
 	.int-table-title {
-		font-size: 22px;
-		line-height: 28px;
-		font-weight: 700;
-		-webkit-font-smoothing: antialiased;
-		color: #000;
-		font-family: "GH Guardian Headline", Georgia, serif;
-		margin-bottom: 2px;
+		// font-size: 22px;
+		// line-height: 28px;
+		// font-weight: 700;
+		// -webkit-font-smoothing: antialiased;
+		// color: #000;
+		// font-family: "GH Guardian Headline", Georgia, serif;
+		// margin-bottom: 2px;
+
+		padding:6px 0 25px 0;
+		margin:0;
+		font-family:'GH Guardian Headline', Georgia, serif;
+		font-size:18px;
+		font-weight:700;
+		line-height: 22px;
+		color: #333;
+
+		@media screen and (min-width: 380px) {
+				font-size:20px;
+				line-height: 24px;
+		}
 	}
 
 	.int-table-subtitle {
+		padding:0 0 20px 0;
+		margin:0;
+		font-family:'Guardian Text Egyptian Web', Arial, sans-serif;
+		font-size:14px;
+		font-weight:200;
+		line-height: 18px;
 		color: #333;
-		-webkit-font-smoothing: antialiased;
-		font-family: "Guardian Text Egyptian Web", sans-serif;
-		font-size: 16px;
-		line-height: 24px;
-		margin-bottom: 12px;
 
-		@include mq($until: mobileLandscape) {
-			font-size: 14px;
-			line-height: 20px;
-		}
+		// @include mq($until: mobileLandscape) {
+		// 	font-size: 14px;
+		// 	line-height: 20px;
+		// }
 	}
 
 	#int-table__wrapper {
@@ -178,32 +206,43 @@ $guss-webfonts-base-url: '//pasteup.guim.co.uk/fonts/';
     	width: 1px;
 	}
 
+	span {
+
+		display: inline-block;
+		position: relative;
+		pointer-events:none;
+
 	&::after {
 		content: ' ';
+		display:block;
 		width: 0;
 		height: 0;
-		border-left: 3px solid transparent;
-		border-right: 3px solid transparent;
-		border-bottom: 4px solid #bdbdbd;
+		border-left: 4px solid transparent;
+		border-right: 4px solid transparent;
+		border-bottom: 5px solid #bcbcbc;
 		position: absolute;
-		top: 8px;
+		top: 0px;
 		margin-left: 10px;
-		right: 5px;
-		opacity: 0;
+		//right: 5px;
+		right: -15px;
+		//opacity: 0;
 	}
 
 	&::before {
 		content: ' ';
+		display:block;
 		width: 0;
 		height: 0;
-		border-left: 3px solid transparent;
-		border-right: 3px solid transparent;
-		border-top: 4px solid #bdbdbd;
+		border-left: 4px solid transparent;
+		border-right: 4px solid transparent;
+		border-top: 5px solid #bcbcbc;
 		position: absolute;
-		right: 5px;
-		top: 13px;
-		opacity: 0;
+		right: -15px;
+		top: 8px;
+		//opacity: 0;
 	}
+
+}
 
 	&:hover {
 		cursor: pointer;
@@ -219,27 +258,26 @@ $guss-webfonts-base-url: '//pasteup.guim.co.uk/fonts/';
 	}
 }
 
-th.column-header.sorted::before {
+th.column-header.sorted span::before {
+	//top: 11px;
+	border-top: 5px solid #121212;
 	opacity: 1;
-	top: 11px;
-	border-top: 4px solid #767676;
-	opacity: 1;
 }
 
-th.column-header.sorted::after {
-	opacity: 0;
-	border-bottom: 4px solid #767676;
+th.column-header.sorted span::after {
+	//opacity: 0;
+	border-bottom: 5px solid #bcbcbc;
 }
 
-th.column-header.sorted-reversed::before {
-	border-top: 4px solid #767676;
-	opacity: 0;
+th.column-header.sorted-reversed span::before {
+	border-top: 5px solid #bcbcbc;
+	//opacity: 0;
 }
 
-th.column-header.sorted-reversed::after {
+th.column-header.sorted-reversed span::after {
 	display: block;
-	top: 11px;
-	border-bottom: 4px solid #767676;
+	//top: 11px;
+	border-bottom: 5px solid #121212;
 	opacity: 1;
 }
 
@@ -248,21 +286,32 @@ th.column-header.sorted, th.column-header.sorted-reversed {
 	// font-weight: 600 !important;
 }
 
+.search-wrapper {
+	position: relative;
+	max-width: 640px;
+
+	svg {
+		position: absolute;
+		top: 6px;
+		right: 8px;
+		height: 26px;
+	}
+}
+
 #search-field {
-	height: 36px;
-	border: 1px solid #dfdfdf;
+	height: 40px;
+	border: 1px solid #dcdcdc;
 	border-radius: 24px;
-	padding: 4px 12px;
+	padding: 12px 12px;
 	width: 100%;
 	font-size: 14px;
 	margin-bottom: 18px;
 	color: #767676;
-	max-width: 620px;
 	box-sizing: border-box;
 
     &:focus {
     	outline: 0;
-    	border: 1px solid #767676;
+    	border: 1px solid #dcdcdc;
     	color: #333;
     }
 }
@@ -332,15 +381,19 @@ $percentagebarHeight: 15px;
 	border-radius: 4px;
 	position: relative;
 	text-align: center;
-	background-color: #eaeaea;
+	background-color: #cdcdcd;
 	font-size: 11px;
 	font-weight: 400;
-	mix-blend-mode: multiply;
+	//mix-blend-mode: multiply;
 	//background-color: rgba(0,0,0, 0.08);
 	//background-color: white;
 	//border: 1px solid rgba(0,0,0, 0.2);
 	overflow: hidden;
 	text-align: center;
+
+	.highlighted & {
+		mix-blend-mode: multiply;
+	}
 	span:first-child {
 		position: absolute;
 		left: 0;
@@ -362,7 +415,7 @@ $percentagebarHeight: 15px;
 	}
 	@include mq($until: desktop) {
 	    display: inline-block;
-	    margin-left: 5px;
+	    //margin-left: 5px;
 	    vertical-align: middle;
 	}
 }
