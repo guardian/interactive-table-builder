@@ -30,6 +30,23 @@ $guss-webfonts-base-url: '//pasteup.guim.co.uk/fonts/';
 				left: -9999px;
 			}
 
+			tr {
+				border-top: 1px solid #bcbcbc;
+				padding: 4px 4px 4px 4px;
+				position: relative;
+
+				&::before {
+					display: block;
+					position: absolute;
+					content:"";
+					width: calc(35% + 8px);
+					max-width: 188px;
+					height: calc(100% - 8px);
+					border-right: 1px dotted #bcbcbc;
+					top: 4px;
+				}
+			}
+
 			th {
 				border-bottom: none;
 				vertical-align: top;
@@ -40,11 +57,47 @@ $guss-webfonts-base-url: '//pasteup.guim.co.uk/fonts/';
 				border: none;
 				border-bottom: 0 !important;
 				position: relative;
+				
+
+
+				&::before {
+					display: inline-block;
+					width: 35%;
+					padding-right: 20px;
+					max-width: 180px;
+					height: 100%;
+				}
 			}
 
 			tr td {
-				padding: 0;
+				padding: 4px 0 4px 0;
 				text-align: left !important;
+			}
+
+			tr td, tr th {
+				min-height: 18px;
+				&:nth-of-type(1) {
+					padding: 4px 0 4px 0;
+					&::after {
+						// display: block;
+						// content: "";
+						// width: calc(100% + 8px);
+						// height: 100%;
+						// position: absolute;
+						//background: rgba(0,0,0,0.05);
+						// border-bottom: 1px dotted #bcbcbc;
+						// top: -4px;
+						// left: -4px;
+						// z-index: 1;
+					}
+					// font-weight: 500;
+					// color: #121212;
+				}
+			}
+
+			svg {
+				padding: 0 0 0 3px;
+				position: absolute;
 			}
 		}
 
@@ -57,6 +110,13 @@ $guss-webfonts-base-url: '//pasteup.guim.co.uk/fonts/';
 			@include mq($until: mobileLandscape) {
 				padding: 4px 4px 12px 4px;
 				//border-bottom: 1px solid #dcdcdc;
+				&:nth-of-type(odd) {
+
+					background-color:#f6f6f6;
+		
+				//background-color:#eaeaea;
+		
+				}
 			}
 		}
 	}
@@ -77,7 +137,7 @@ $guss-webfonts-base-url: '//pasteup.guim.co.uk/fonts/';
 		//background-color: #ffe500;
 		//background-color:#f6f6f6;
 		//background-color:#dcdcdc;
-		background-color:#ffe500;
+		background-color:#ffe500 !important;
 		//background-color:#999999;
 		//border-top: 1px solid #999;
 	}
@@ -89,15 +149,15 @@ $guss-webfonts-base-url: '//pasteup.guim.co.uk/fonts/';
 	tr td {
 		//vertical-align: top;
 		padding: 6px 20px 6px 0;
-		font-family: "Guardian Text Sans Web";
+		font-family: "Guardian Text Sans Web", Arial, sans-serif;
   		font-size: 13px;
   		line-height: 16px;
 		  color: #333;
 		  text-shadow: 0 0 2px rgba(255,255,255,0.3);
 		  &:nth-of-type(1) {
 			padding: 6px 20px 6px 10px;
-			font-weight: 500;
-			color: #121212;
+			// font-weight: 500;
+			// color: #121212;
 			}
 		 
 	}
@@ -107,7 +167,10 @@ $guss-webfonts-base-url: '//pasteup.guim.co.uk/fonts/';
 		//border-bottom: 1px dotted #dcdcdc;
 
 		&:nth-of-type(odd) {
-		background-color:#eaeaea;
+
+			background-color:#eaeaea;
+
+		//background-color:#eaeaea;
 
 		}
 
@@ -172,6 +235,7 @@ $guss-webfonts-base-url: '//pasteup.guim.co.uk/fonts/';
 				position: absolute;
 				left: 0;
 				bottom: 36px;
+				z-index: 2;
 				background: -moz-linear-gradient(top, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
 				background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(255, 255, 255, 0)), color-stop(100%, #ffffff));
 				background: -webkit-linear-gradient(top, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
@@ -197,7 +261,7 @@ $guss-webfonts-base-url: '//pasteup.guim.co.uk/fonts/';
 	font-size: 13px !important;
 	vertical-align: top;
 	font-weight: bold;
-	line-height: 12px;
+	line-height: 15px;
 	border-bottom: 2px solid #bdbdbd;
 	position: relative;
 
@@ -208,9 +272,28 @@ $guss-webfonts-base-url: '//pasteup.guim.co.uk/fonts/';
 
 	span {
 
-		display: inline-block;
+		display: inline;
 		position: relative;
-		pointer-events:none;
+		//pointer-events:none;
+		//background: red;
+		//width: fit-content; 
+// 		box-decoration-break: clone;
+//   -webkit-box-decoration-break: clone;
+//   white-space: pre-wrap;
+//max-width: 50%;
+//float: left;
+
+//width: max-content;
+
+	}
+
+	.toggle-wrapper {
+
+		display: inline-block;
+		//background: green;
+		//padding-bottom: 10px;
+		position: relative;
+
 
 	&::after {
 		content: ' ';
@@ -221,10 +304,12 @@ $guss-webfonts-base-url: '//pasteup.guim.co.uk/fonts/';
 		border-right: 4px solid transparent;
 		border-bottom: 5px solid #bcbcbc;
 		position: absolute;
-		top: 0px;
-		margin-left: 10px;
+		top: 3px;
+		right: 0;
+		//left: 0;
+		//margin-left: 10px;
 		//right: 5px;
-		right: -15px;
+		//right: -15px;
 		//opacity: 0;
 	}
 
@@ -237,8 +322,8 @@ $guss-webfonts-base-url: '//pasteup.guim.co.uk/fonts/';
 		border-right: 4px solid transparent;
 		border-top: 5px solid #bcbcbc;
 		position: absolute;
-		right: -15px;
-		top: 8px;
+		right: 0;
+		top: 11px;
 		//opacity: 0;
 	}
 
@@ -293,7 +378,7 @@ th.column-header.sorted, th.column-header.sorted-reversed {
 	svg {
 		position: absolute;
 		top: 6px;
-		right: 8px;
+		left: 8px;
 		height: 26px;
 	}
 }
@@ -302,7 +387,7 @@ th.column-header.sorted, th.column-header.sorted-reversed {
 	height: 40px;
 	border: 1px solid #dcdcdc;
 	border-radius: 24px;
-	padding: 12px 12px;
+	padding: 12px 12px 12px 36px;
 	width: 100%;
 	font-size: 14px;
 	margin-bottom: 18px;
@@ -323,12 +408,13 @@ th.column-header.sorted, th.column-header.sorted-reversed {
 	display: block;
 	padding: 3px 0;
 	padding-right: 20px;
+	
 
 	@include mq($until: desktop) {
 		width: 90px;
 		height: 20px;
 		display: inline;
-    	vertical-align: middle;
+		vertical-align: middle;
 	}
 }
 
@@ -344,8 +430,9 @@ figure {
     border: 0;
     border-radius: 100px;
     color: white;
-    display: inline-block;
-    font-family: 'Guardian Text Egyptian Web', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
+	display: inline-block;
+	font-family: "Guardian Text Sans Web", Arial, sans-serif;
+    //font-family: 'Guardian Text Egyptian Web', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
     font-size: 14px;
     font-weight: 500;
     height: 30px;

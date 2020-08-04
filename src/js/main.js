@@ -34,6 +34,16 @@ define([
         sparklineVals = [],
         specialColumns = {'bold': [], 'percentagebar': [], 'desc': [], 'asc': []};
 
+        var eventTimeout, eventThrottler = function () {
+            // ignore resize events as long as an actualResizeHandler execution is in the queue
+            if ( !eventTimeout ) {
+                eventTimeout = setTimeout(function() {
+                    eventTimeout = null;
+                    resizeHeaders();
+                 }, 66);
+            }
+        };
+
     function init(el, spreadsheetID) {
         reqwest({
             url: "https://interactive.guim.co.uk/docsdata/" + spreadsheetID + ".json",
@@ -52,6 +62,8 @@ define([
     }
 
     function app(spreadsheet, el) {
+     
+
         data = spreadsheet;
 
         //console.log(data);
@@ -189,7 +201,33 @@ define([
             currentSort = colnum;
 
         }
+
+        if( document.readyState !== 'loading' ) {
+
+            resizeHeaders();
+
+        } else {
+            window.addEventListener("DOMContentLoaded", function(event) {
+
+                resizeHeaders();
+    
+            })
+        }
+
+        window.addEventListener( 'resize', eventThrottler, false );
     }
+
+    function resizeHeaders() {
+        
+    
+        var w, list = document.querySelectorAll(".toggle-wrapper span");
+
+
+        for (var i=0; i<list.length; i++) {
+            w = list[i].offsetWidth;
+            list[i].parentNode.style.width = (w + 15) + "px";
+        }
+       }
 
     function sortColumns(e) {
 
