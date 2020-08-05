@@ -166,11 +166,9 @@ $guss-webfonts-base-url: '//pasteup.guim.co.uk/fonts/';
 		background-color: #f6f6f6;
 		//border-bottom: 1px dotted #dcdcdc;
 
-		&:nth-of-type(odd) {
+		&:nth-of-type(even) {
 
 			background-color:#eaeaea;
-
-		//background-color:#eaeaea;
 
 		}
 
@@ -262,7 +260,7 @@ $guss-webfonts-base-url: '//pasteup.guim.co.uk/fonts/';
 	vertical-align: top;
 	font-weight: bold;
 	line-height: 15px;
-	border-bottom: 2px solid #bdbdbd;
+	border-bottom: 1px solid #bdbdbd;
 	position: relative;
 
 	@media screen and (-webkit-min-device-pixel-ratio:0) {
@@ -274,25 +272,15 @@ $guss-webfonts-base-url: '//pasteup.guim.co.uk/fonts/';
 
 		display: inline;
 		position: relative;
-		//pointer-events:none;
-		//background: red;
-		//width: fit-content; 
-// 		box-decoration-break: clone;
-//   -webkit-box-decoration-break: clone;
-//   white-space: pre-wrap;
-//max-width: 50%;
-//float: left;
-
-//width: max-content;
-
+		pointer-events:none;
 	}
 
 	.toggle-wrapper {
-
-		display: inline-block;
-		//background: green;
-		//padding-bottom: 10px;
-		position: relative;
+		display: block;
+		position: absolute;
+		pointer-events:none;
+		top: 5px;
+		right: 10px;
 
 
 	&::after {
@@ -302,15 +290,11 @@ $guss-webfonts-base-url: '//pasteup.guim.co.uk/fonts/';
 		height: 0;
 		border-left: 4px solid transparent;
 		border-right: 4px solid transparent;
-		border-bottom: 5px solid #bcbcbc;
+		border-bottom: 5px solid #121212;
 		position: absolute;
-		top: 3px;
+		top: 2px;
 		right: 0;
-		//left: 0;
-		//margin-left: 10px;
-		//right: 5px;
-		//right: -15px;
-		//opacity: 0;
+		opacity: 0.3;
 	}
 
 	&::before {
@@ -320,18 +304,77 @@ $guss-webfonts-base-url: '//pasteup.guim.co.uk/fonts/';
 		height: 0;
 		border-left: 4px solid transparent;
 		border-right: 4px solid transparent;
-		border-top: 5px solid #bcbcbc;
+		border-top: 5px solid #121212;
 		position: absolute;
 		right: 0;
-		top: 11px;
-		//opacity: 0;
+		top: 10px;
+		opacity: 0.3;
 	}
 
 }
 
+&::before {
+	content: "";
+	display: block;
+	position: absolute;
+	//z-index: -1;
+	left: -5px;
+	top: 0;
+	width: 100%;
+	height: 100%;
+//background-color: #f6f6f6;
+//border-radius: 2px 2px 0 0;
+border-right: 1px solid #dcdcdc;
+	
+}
+
+&:first-of-type {
+	&::before {
+	left: 0;
+	width: calc(100% - 5px);
+	}
+}
+
+&:last-of-type {
+	&::before {
+	width: calc(100% + 4px);
+	border-right: none;
+	}
+}
+
 	&:hover {
 		cursor: pointer;
-		background-color: #f9f9f9;
+		//background-color: #f9f9f9;
+		// span {
+			&::before {
+				content: "";
+				display: block;
+				position: absolute;
+				//z-index: -1;
+				left: -4px;
+				top: 0;
+				width: 100%;
+				height: 100%;
+		background-color: #f6f6f6;
+		border-radius: 2px 2px 0 0;
+				
+			}
+
+			&:first-of-type {
+				&::before {
+				left: 0;
+				width: calc(100% - 4px);
+				}
+			}
+
+			&:last-of-type {
+				&::before {
+				width: calc(100% + 4px);
+				}
+			}
+		//}
+
+		.toggle-wrapper {
 
 		&::after {
 			opacity: 1;
@@ -340,29 +383,33 @@ $guss-webfonts-base-url: '//pasteup.guim.co.uk/fonts/';
 		&::before {
 			opacity: 1;
 		}
+
+		}
 	}
 }
 
-th.column-header.sorted span::before {
+th.column-header.sorted .toggle-wrapper::before {
 	//top: 11px;
-	border-top: 5px solid #121212;
+	//border-top: 5px solid #121212;
 	opacity: 1;
 }
 
-th.column-header.sorted span::after {
+th.column-header.sorted .toggle-wrapper::after {
 	//opacity: 0;
-	border-bottom: 5px solid #bcbcbc;
+	//border-bottom: 5px solid #bcbcbc;
+	opacity: 0.3;
 }
 
-th.column-header.sorted-reversed span::before {
-	border-top: 5px solid #bcbcbc;
+th.column-header.sorted-reversed .toggle-wrapper::before {
+	//border-top: 5px solid #bcbcbc;
 	//opacity: 0;
+	opacity: 0.3;
 }
 
-th.column-header.sorted-reversed span::after {
-	display: block;
+th.column-header.sorted-reversed .toggle-wrapper::after {
+	//display: block;
 	//top: 11px;
-	border-bottom: 5px solid #121212;
+	//border-bottom: 5px solid #121212;
 	opacity: 1;
 }
 

@@ -186,19 +186,19 @@ define([
 
         if (specialColumns.desc.length == 0 && specialColumns.asc.length > 0) {
 
-            colnum = specialColumns.asc[0];
-            headers[colnum].className += " sorted-reversed";
-            lastSorted = headers[colnum];
-            currentSort = colnum;
+            // colnum = specialColumns.asc[0];
+            // headers[colnum].className += " sorted-reversed";
+            // lastSorted = headers[colnum];
+            // currentSort = colnum;
 
         }
 
         if (specialColumns.desc.length > 0) {
 
-            colnum = specialColumns.desc[0];
-            headers[colnum].className += " sorted";
-            lastSorted = headers[colnum];
-            currentSort = colnum;
+            // colnum = specialColumns.desc[0];
+            // headers[colnum].className += " sorted";
+            // lastSorted = headers[colnum];
+            // currentSort = colnum;
 
         }
 
@@ -220,13 +220,22 @@ define([
     function resizeHeaders() {
         
     
-        var w, list = document.querySelectorAll(".toggle-wrapper span");
+        // var rect, w, offset, spans = document.querySelectorAll(".column-header span"), toggles = document.querySelectorAll(".toggle-wrapper");
+    
+        // for (var i=0; i<spans.length; i++) {
+        //     rect = spans[i].getBoundingClientRect();
+        //     w = rect.width;
+        //     //list[i].parentNode.style.width = (w + 15) + "px";
 
+        //     if (i == 0) {
+        //         offset = 25;
+        //     } else {
+        //         offset = 15;
+        //     }
 
-        for (var i=0; i<list.length; i++) {
-            w = list[i].offsetWidth;
-            list[i].parentNode.style.width = (w + 15) + "px";
-        }
+        //     toggles[i].style.left = (w + offset) + "px";
+
+        // }
        }
 
     function sortColumns(e) {
@@ -309,6 +318,7 @@ define([
             });
         if (exactMatch) { removeGradient() };    
         tbodyEl.innerHTML = rendered;
+        resizeHeaders();
     }
 
     function addMobilePrefix(collapseMobile) {

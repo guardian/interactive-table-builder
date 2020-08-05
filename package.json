@@ -10,7 +10,7 @@
   "license": "Apache 2.0",
   "config": {
     "port": 9000,
-    "s3_folder": "test/tools/tables/"
+    "s3_folder": "embed/testing/table-tool/"
   },
   "scripts": {
     "dev": "./node_modules/.bin/grunt"
