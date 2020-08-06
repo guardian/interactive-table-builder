@@ -515,14 +515,15 @@ figure {
     }
 }
 
-$percentagebarHeight: 15px;
+$percentagebarHeight: 16px;
 .percentagebar {
 	width: 120px;
 	height: $percentagebarHeight;
 	border-radius: 4px;
 	position: relative;
 	text-align: center;
-	font-size: 11px;
+	font-size: 11.5px;
+	line-height: 17px;
 	font-weight: 400;
 	//mix-blend-mode: multiply;
 	//background-color: rgba(0,0,0, 0.08);
