@@ -153,7 +153,6 @@ $guss-webfonts-base-url: '//pasteup.guim.co.uk/fonts/';
   		font-size: 13px;
   		line-height: 16px;
 		  color: #333;
-		  text-shadow: 0 0 2px rgba(255,255,255,0.3);
 		  &:nth-of-type(1) {
 			padding: 6px 20px 6px 10px;
 			// font-weight: 500;
@@ -377,11 +376,11 @@ border-right: 1px solid #dcdcdc;
 		.toggle-wrapper {
 
 		&::after {
-			opacity: 1;
+			opacity: 1 !important;
 		}
 
 		&::before {
-			opacity: 1;
+			opacity: 1 !important;
 		}
 
 		}
@@ -515,7 +514,6 @@ $percentagebarHeight: 15px;
 	border-radius: 4px;
 	position: relative;
 	text-align: center;
-	background-color: #cdcdcd;
 	font-size: 11px;
 	font-weight: 400;
 	//mix-blend-mode: multiply;
@@ -525,17 +523,29 @@ $percentagebarHeight: 15px;
 	overflow: hidden;
 	text-align: center;
 
-	.highlighted & {
-		mix-blend-mode: multiply;
+	&:before {
+		content: "";
+		display: block;
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		top: 0;
+		left: 0;
+		background-color: #cdcdcd;
+		.highlighted & {
+			mix-blend-mode: multiply;
+			opacity: 0.8;
+		}
 	}
+
 	span:first-child {
 		position: absolute;
 		left: 0;
 		top: 0;
 		height: 100%;
 		//background-color: #ffe500;
-		background-color: #e99999;
-		background-color: #ff1921;
+		//background-color: #e99999;
+		//background-color: #ff1921;
 		background-color: #dd6666;
 		//background-color:#ffe500;
 		border-radius: 4px;
@@ -545,7 +555,31 @@ $percentagebarHeight: 15px;
 	}
 	span:nth-child(2) {
 		position: relative;
+		display: inline-block; 
 		z-index: 1;
+		font-weight: 500;
+		color: #121212 !important;
+		//text-shadow: 0 0 2px rgba(255,255,255,0.6) 0 0 1px rgba(255,255,255,0.6);
+		text-shadow: 0px 0px 2px rgba(255, 255, 255, 0.5);
+		
+		
+		// text-shadow:
+        // 0.05em 0 rgba(255, 255, 255, 0.1),
+        // 0 0.05em rgba(255, 255, 255, 0.1),
+        // -0.05em 0 rgba(255, 255, 255, 0.1),
+        // 0 -0.05em rgba(255, 255, 255, 0.1),
+        // -0.05em -0.05em rgba(255, 255, 255, 0.1),
+        // -0.05em 0.05em rgba(255, 255, 255, 0.1),
+        // 0.05em -0.05em rgba(255, 255, 255, 0.1),
+		// 0.05em 0.05em rgba(255, 255, 255, 0.1);
+		// &:after {
+		// 	content: attr(data-after);
+		// 	//display: block;
+		// 	position: absolute;
+		// 	// top: 0px;
+		// 	margin-left: -100%;
+		// }
+
 	}
 	@include mq($until: desktop) {
 	    display: inline-block;
